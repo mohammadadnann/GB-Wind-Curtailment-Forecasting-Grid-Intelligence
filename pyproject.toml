@@ -1,0 +1,15 @@
+[project]
+name = "gb-curtailment-forecast"
+version = "0.1.0"
+description = "Day ahead forecasting of Scottish wind curtailment and constraint cost"
+requires-python = ">=3.11"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["src*"]
+
+[tool.ruff]
+line-length = 88

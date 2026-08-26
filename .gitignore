@@ -1,0 +1,20 @@
+# data
+data/raw/
+data/interim/
+data/processed/
+!data/reference/
+
+# environment
+.venv/
+.env
+__pycache__/
+*.pyc
+
+# tooling
+.ipynb_checkpoints/
+mlruns/
+.pytest_cache/
+.ruff_cache/
+
+*.egg-info/
+.DS_Store
