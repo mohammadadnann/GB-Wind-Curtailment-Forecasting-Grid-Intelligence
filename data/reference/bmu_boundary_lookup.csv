@@ -1,0 +1,181 @@
+elexonBmUnit,bmUnitName,leadPartyName,capacity_mw,repd_site_name,repd_capacity_mw,country,latitude,longitude,match_score,match_status,match_note,north_of_b6,north_of_b4
+T_SGRWO-6,Seagreen1 Offshore WF 6,Seagreen Wind Energy Limited,525.302,Seagreen,1075,Scotland,56.63551233113348,-1.926620733768669,0.941,accepted,,True,True
+T_SOFOW-21,Sofia Offshore Wind BMU 3,Sofia Offshore Wind Farm Ltd,457.0,Solutia UK Ltd,5,Wales,51.56658052283794,-2.9626159436300297,0.632,review,,False,False
+T_SOFOW-22,Sofia Offshore Wind BMU 4,Sofia Offshore Wind Farm Ltd,457.0,Solutia UK Ltd,5,Wales,51.56658052283794,-2.9626159436300297,0.632,review,,False,False
+T_SOFOW-12,Sofia Offshore Wind BMU 2,Sofia Offshore Wind Farm Ltd,457.0,Solutia UK Ltd,5,Wales,51.56658052283794,-2.9626159436300297,0.632,review,,False,False
+T_SOFOW-11,Sofia Offshore Wind BMU 1,Sofia Offshore Wind Farm Ltd,457.0,Solutia UK Ltd,5,Wales,51.56658052283794,-2.9626159436300297,0.632,review,,False,False
+T_HOWBO-3,HORNSEA_WF_2C,Soundmark Wind Limited,440.0,Hornsea 3,2955,England,53.68154166355047,1.4207395028468652,0.9,accepted,,False,False
+T_HOWBO-2,HORNSEA_WF_2B,Sonningmay Wind Limited,440.0,Hornsea 3,2955,England,53.68154166355047,1.4207395028468652,0.9,accepted,,False,False
+T_HOWBO-1,HORNSEA_WF_2A,Breesea Limited,440.0,Hornsea 3,2955,England,53.68154166355047,1.4207395028468652,0.9,accepted,,False,False
+T_SGRWO-1,Seagreen1 Offshore WF 1,Seagreen Wind Energy Limited,431.132,Seagreen,1075,Scotland,56.63551233113348,-1.926620733768669,0.941,accepted,,True,True
+T_SOKYW-1,South Kyle Wind Farm,South Kyle Wind Farm Limited,426.916,South Kyle Wind Farm,240,Scotland,55.317334518247506,-4.293183075218487,1.0,accepted,,True,False
+T_TKNWW-1,Triton Knoll OSP west 1,Triton Knoll Offshore Wind,412.0,Triton Knoll,857,England,53.21227229537231,0.8616390875533684,1.0,accepted,,False,False
+T_TKNEW-1,Triton Knoll OSP East 1,Triton Knoll Offshore Wind,412.0,Triton Knoll,857,England,53.21227229537231,0.8616390875533684,1.0,accepted,,False,False
+T_HOWAO-2,HORNSEA_1B,Hornsea 1 Limited,400.0,Hornsea 3,2955,England,53.68154166355047,1.4207395028468652,0.9,accepted,,False,False
+T_HOWAO-3,HORNSEA_1C,Hornsea 1 Limited,400.0,Hornsea 3,2955,England,53.68154166355047,1.4207395028468652,0.9,accepted,,False,False
+T_HOWAO-1,HORNSEA_1A,Hornsea 1 Limited,400.0,Hornsea 3,2955,England,53.68154166355047,1.4207395028468652,0.9,accepted,,False,False
+T_GANW-22,Galloper OSP 22,Galloper Offshore WindFarm Ltd,385.82,Galloper Wind Farm,353,England,51.87999173192822,2.0399934355980855,1.0,accepted,,False,False
+T_SGRWO-3,Seagreen1 Offshore WF 3,Seagreen Wind Energy Limited,374.618,Seagreen,1075,Scotland,56.63551233113348,-1.926620733768669,0.941,accepted,,True,True
+T_EAAO-2,East Anglia One Offshore 2,East Anglia One Limited,367.0,East Anglia 3 (EA 3),1400,England,52.13696213020822,2.172796159006266,0.842,review,,False,False
+T_EAAO-1,East Anglia One Offshore 1,East Anglia One Limited,358.0,East Anglia 3 (EA 3),1400,England,52.13696213020822,2.172796159006266,0.842,review,,False,False
+T_WLNYO-3,WALNEY_3,Walney Extension Ltd,330.0,Walney 1,183.6,England,54.03944862079485,-3.515788862345325,1.0,accepted,,False,False
+T_WLNYO-4,WALNEY_4,Walney Extension Ltd,330.0,Walney 1,183.6,England,54.03944862079485,-3.515788862345325,1.0,accepted,,False,False
+T_WHILW-1,T_WHILW-1,SP Renewables (UK) Limited,309.0,Pates Hill,14,Scotland,55.81638608679794,-3.6113177433851695,0.588,unmatched,,True,False
+T_DBBWO-2,Dogger Bank B Offshore WF 2,Doggerbank OWF Project 2,304.4,Dogger Bank C (was Teesside A),1200,England,55.20999299189537,2.3299985915381067,0.585,unmatched,,False,False
+T_DBAWO-2,Dogger Bank A Offshore WF 2,Doggerbank OWF Project 1,304.0,Dogger Bank A & B (was Creyke Beck A & B),2400,England,55.96733662025414,1.667920963906612,0.9,accepted,,False,False
+T_DBAWO-3,Dogger Bank A Offshore WF 3,Doggerbank OWF Project 1,302.8,Dogger Bank A & B (was Creyke Beck A & B),2400,England,55.96733662025414,1.667920963906612,0.9,accepted,,False,False
+T_DBAWO-1,Dogger Bank A Offshore WF 1,Doggerbank OWF Project 1,302.4,Dogger Bank A & B (was Creyke Beck A & B),2400,England,55.96733662025414,1.667920963906612,0.9,accepted,,False,False
+T_DBBWO-1,Dogger Bank B Offshore WF 1,Doggerbank OWF Project 2,302.4,Dogger Bank C (was Teesside A),1200,England,55.20999299189537,2.3299985915381067,0.585,unmatched,,False,False
+T_DBBWO-3,Dogger Bank B Offshore WF 3,Doggerbank OWF Project 2,302.3,Dogger Bank C (was Teesside A),1200,England,55.20999299189537,2.3299985915381067,0.585,unmatched,,False,False
+T_SGRWO-5,Seagreen1 Offshore WF 5,Seagreen Wind Energy Limited,300.0,Seagreen,1075,Scotland,56.63551233113348,-1.926620733768669,0.941,accepted,,True,True
+T_MOWEO-3,Moray East OWF3,Moray Offshore Wind East Ltd,300.0,Moray East,950,Scotland,57.96732452349117,-2.790536894837343,0.9,accepted,,True,True
+T_MOWEO-2,Moray East OWF2,Moray Offshore Wind East Ltd,300.0,Moray East,950,Scotland,57.96732452349117,-2.790536894837343,0.9,accepted,,True,True
+T_MOWEO-1,Moray East OWF1,Moray Offshore Wind East Ltd,300.0,Moray East,950,Scotland,57.96732452349117,-2.790536894837343,0.9,accepted,,True,True
+T_RCBKO-2,RACE_BANK_Z02,Race Bank Wind Farm Ltd,290.0,Race Bank (Phase 1),289.8,England,53.13597422722279,0.5891743756243718,0.9,accepted,,False,False
+T_THNTO-1,Thanet Offshore Wind Limited 1,Thanet Offshore Wind Limited,287.699,Thanet,300,England,51.42993205828252,1.6334113898517628,1.0,accepted,,False,False
+T_MOWWO-4,Moray West OWF4,Moray Offshore Wind West Ltd,287.0,Moray East,950,Scotland,57.96732452349117,-2.790536894837343,0.9,accepted,,True,True
+T_RCBKO-1,RACE_BANK_Z01,Race Bank Wind Farm Ltd,284.0,Race Bank (Phase 1),289.8,England,53.13597422722279,0.5891743756243718,0.9,accepted,,False,False
+T_BDCHW-1,Bad a Cheo Wind Farm,RWE Generation UK plc,270.0,Bad a Cheo Wind Farm,26.7,Scotland,58.420462483226444,-3.4291930081059174,1.0,accepted,,True,True
+T_BRBEO-1,BURBO_EXTENSION,Burbo Extension Limited,257.7,Burbo Bank,90,England,53.48818301652092,-3.1849225421466496,0.9,accepted,,False,False
+T_KLGLW-1,Kilgallioch Windfarm,SP Renewables (UK) Limited,252.66,Kilgallioch wind farm,239,Scotland,54.98845275791273,-4.801715850373398,1.0,accepted,,True,False
+T_GRGBW-1,Greater Gabbard Module 1,Greater Gabbard Offshore Winds,240.0,Greater Gabbard Wind Farm,504,England,51.91764465935985,1.9284202368399181,0.9,accepted,,False,False
+T_GRGBW-2,Greater Gabbard Module 2,Greater Gabbard Offshore Winds,240.0,Greater Gabbard Wind Farm,504,England,51.91764465935985,1.9284202368399181,0.9,accepted,,False,False
+T_GRGBW-3,Greater Gabbard Module 3,Greater Gabbard Offshore Winds,240.0,Greater Gabbard Wind Farm,504,England,51.91764465935985,1.9284202368399181,0.9,accepted,,False,False
+T_THNTO-2,Thanet Offshore Wind Limited 2,Thanet Offshore Wind Limited,230.159,Thanet,300,England,51.42993205828252,1.6334113898517628,1.0,accepted,,False,False
+T_PNYCW-1,PNYCW-1 Export,Pen y Cymoedd Wind Farm LTD,228.0,Mynydd Portref,9.4,Wales,51.556394803194976,-3.4597357047926947,0.538,unmatched,,False,False
+T_NNGAO-2,Neart Na Gaiothe WF 2,Neart Na Gaoithe Offshore Wind,224.0,Neart na Gaoithe,450,Scotland,56.26999980237445,-2.2500011715258426,0.938,accepted,,True,True
+T_NNGAO-1,Neart Na Gaiothe WF 1,Neart Na Gaoithe Offshore Wind,224.0,Neart na Gaoithe,450,Scotland,56.26999980237445,-2.2500011715258426,0.938,accepted,,True,True
+T_SGRWO-2,Seagreen1 Offshore WF 2,Seagreen Wind Energy Limited,220.0,Seagreen,1075,Scotland,56.63551233113348,-1.926620733768669,0.941,accepted,,True,True
+T_MOWWO-1,Moray West OWF1,Moray Offshore Wind West Ltd,215.0,Moray East,950,Scotland,57.96732452349117,-2.790536894837343,0.9,accepted,,True,True
+T_MOWWO-2,Moray West OWF2,Moray Offshore Wind West Ltd,215.0,Moray East,950,Scotland,57.96732452349117,-2.790536894837343,0.9,accepted,,True,True
+T_WHILW-2,Whitelee Extension,SP Renewables (UK) Limited,206.0,Whitelee Windfarm Extension phase 2,109,Scotland,55.63942792702672,-4.317630408823731,1.0,accepted,,True,False
+T_WTMSO-1,WESTERMOST_ROUGH,Westermost Rough Limited,205.0,Westermost Rough A,210,England,53.097730204705954,0.5614812934582966,0.923,accepted,,False,False
+T_WDNSO-2,West of Duddon Sands Offshore2,Morecambe Wind Limited,201.0,West of Duddon Sands,389,England,53.98514982535915,-3.462007068918209,1.0,accepted,,False,False
+T_RMPNO-1,Rampion Offshore Wind BMU 1,Rampion Offshore Windfarm Ltd,200.1,Pines Burn Wind Farm,33.6,Scotland,55.35374307693845,-2.7302677448961634,0.571,unmatched,,True,False
+T_RMPNO-2,Rampion Offshore Wind BMU 2,Rampion Offshore Windfarm Ltd,200.1,Pines Burn Wind Farm,33.6,Scotland,55.35374307693845,-2.7302677448961634,0.571,unmatched,,True,False
+T_CLDNW-1,Clyde North,Clyde Windfarm (Scotland) Ltd,200.0,Clyde Wind Farm,350,Scotland,55.44163408233999,-3.5427342376805178,1.0,accepted,,True,False
+T_CLDCW-1,Clyde Central,Clyde Windfarm (Scotland) Ltd,200.0,Clyde Wind Farm,350,Scotland,55.44163408233999,-3.5427342376805178,0.9,accepted,,True,False
+T_WDNSO-1,West of Duddon Sands Offshore1,Morecambe Wind Limited,197.0,West of Duddon Sands,389,England,53.98514982535915,-3.462007068918209,1.0,accepted,,False,False
+T_LARYW-4,London Array BMU4,London Array Limited,191.099,London Array Phase 1,630,England,51.621679300913954,1.4958316372825315,0.9,accepted,,False,False
+T_BEATO-1,Beatrice Offshore WF 1,Beatrice Offshore Windfarm Ltd,184.0,Beatrice,588,Scotland,58.08822926265909,-2.9501572056563075,1.0,accepted,,True,True
+T_WLNYO-2,WALNEY_2,Walney Offshore Windfarms Ltd,183.6,Walney 1,183.6,England,54.03944862079485,-3.515788862345325,1.0,accepted,,False,False
+T_WLNYW-1,WALNEY_1,Walney Offshore Windfarms Ltd,182.0,Walney 1,183.6,England,54.03944862079485,-3.515788862345325,1.0,accepted,,False,False
+T_LARYW-3,London Array BMU3,London Array Limited,171.0,London Array Phase 1,630,England,51.621679300913954,1.4958316372825315,0.9,accepted,,False,False
+T_LARYW-2,London Array BMU2,London Array Limited,171.0,London Array Phase 1,630,England,51.621679300913954,1.4958316372825315,0.9,accepted,,False,False
+T_LARYW-1,London Array BMU1,London Array Limited,171.0,London Array Phase 1,630,England,51.621679300913954,1.4958316372825315,0.9,accepted,,False,False
+T_BEATO-2,Beatrice Offshore WF 2,Beatrice Offshore Windfarm Ltd,166.0,Beatrice,588,Scotland,58.08822926265909,-2.9501572056563075,1.0,accepted,,True,True
+T_BEATO-3,Beatrice Offshore WF 3,Beatrice Offshore Windfarm Ltd,166.0,Beatrice,588,Scotland,58.08822926265909,-2.9501572056563075,1.0,accepted,,True,True
+T_BEATO-4,Beatrice Offshore WF 4,Beatrice Offshore Windfarm Ltd,165.526,Beatrice,588,Scotland,58.08822926265909,-2.9501572056563075,1.0,accepted,,True,True
+T_AKGLW-3,AIKENGALL2A-W,AIK2A Sustainable Energy Ltd,163.4,Aikengall,48,Scotland,55.917208733815976,-2.4900662877040944,0.9,accepted,,True,False
+T_SHRSW-1,Sheringham Shoal Unit 1,Scira Offshore Energy Limited,158.4,Sheringham Shoal,317,England,53.135318591811256,1.1479218639515487,0.9,accepted,,False,False
+T_SHRSW-2,Sheringham Shoal Unit 2,Scira Offshore Energy Limited,158.4,Sheringham Shoal,317,England,53.135318591811256,1.1479218639515487,0.9,accepted,,False,False
+T_DOREW-1,Dorenell Wind Farm One,Dorenell Windfarm Limited,156.92,Denzell Downs Wind Farm,10,England,50.46594891358851,-4.9615151040420145,0.72,review,,False,False
+T_DOREW-2,Dorenell Wind Farm Two,Dorenell Windfarm Limited,156.92,Denzell Downs Wind Farm,10,England,50.46594891358851,-4.9615151040420145,0.64,review,,False,False
+T_DBAWO-4,Dogger Bank A Offshore WF 4,Doggerbank OWF Project 1,152.6,Dogger Bank A & B (was Creyke Beck A & B),2400,England,55.96733662025414,1.667920963906612,0.9,accepted,,False,False
+T_DBBWO-4,Dogger Bank B Offshore WF 4,Doggerbank OWF Project 2,152.2,Dogger Bank C (was Teesside A),1200,England,55.20999299189537,2.3299985915381067,0.585,unmatched,,False,False
+T_OMNDW-1,Ormonde Energy Limited 1,Ormonde Energy Ltd,150.76,Ormonde Offshore,150,England,54.08887184061225,-3.438590299125097,0.9,accepted,,False,False
+T_CRYRW-2,Crystal Rig II Windfarm,Eneco Energy Trade,150.62,Crystal Rig Extension II,20.7,Scotland,55.912887491126035,-2.5454918200065446,1.0,accepted,,True,False
+T_LNCSW-1,Lincs wind farm offshore BMU1,Lincs Wind Farm Ltd,150.0,Pines Burn Wind Farm,33.6,Scotland,55.35374307693845,-2.7302677448961634,0.6,unmatched,,True,False
+T_CLDSW-1,Clyde South,Clyde Windfarm (Scotland) Ltd,150.0,Clyde Wind Farm,350,Scotland,55.44163408233999,-3.5427342376805178,1.0,accepted,,True,False
+T_LNCSW-2,Lincs wind farm offshore BMU2,Lincs Wind Farm Ltd,150.0,Pines Burn Wind Farm,33.6,Scotland,55.35374307693845,-2.7302677448961634,0.6,unmatched,,True,False
+T_GYMR-26,GyM OSPW 26,Gwynt y Mor Offshore Wind Farm,148.0,Goonhilly Downs Wind Farm Repower,12,England,50.05036214700749,-5.200212607969071,0.452,unmatched,,False,False
+T_GYMR-17,GyM OSPE 17,Gwynt y Mor Offshore Wind Farm,148.0,Moor House Wind Farm,12,England,54.574646548860514,-1.4972377766537892,0.556,unmatched,,False,False
+T_GYMR-15,GyM OSPE 15,Gwynt y Mor Offshore Wind Farm,148.0,Moor House Wind Farm,12,England,54.574646548860514,-1.4972377766537892,0.556,unmatched,,False,False
+T_GYMR-28,GyM OSPW 28,Gwynt y Mor Offshore Wind Farm,148.0,Goonhilly Downs Wind Farm Repower,12,England,50.05036214700749,-5.200212607969071,0.452,unmatched,,False,False
+T_FALGW-1,Fallago Rig Wind Farm,Fallago Rig Wind Farm Limited,144.0,Fallago Rig,144,Scotland,55.83130753143639,-2.6880276875875873,1.0,accepted,,True,False
+T_MOWWO-3,Moray West OWF3,Moray Offshore Wind West Ltd,143.0,Moray East,950,Scotland,57.96732452349117,-2.790536894837343,0.9,accepted,,True,True
+T_HRSTW-1,Harestanes,SP Renewables (UK) Limited,142.3,Harestanes,136,Scotland,55.239029213040126,-3.5741975868771925,1.0,accepted,,True,False
+T_SGRWO-4,Seagreen1 Offshore WF 4,Seagreen Wind Energy Limited,140.0,Seagreen,1075,Scotland,56.63551233113348,-1.926620733768669,0.941,accepted,,True,True
+T_DBBWO-5,Dogger Bank B Offshore WF 5,Doggerbank OWF Project 2,138.7,Dogger Bank C (was Teesside A),1200,England,55.20999299189537,2.3299985915381067,0.585,unmatched,,False,False
+T_DBAWO-5,Dogger Bank A Offshore WF 5,Doggerbank OWF Project 1,138.2,Dogger Bank A & B (was Creyke Beck A & B),2400,England,55.96733662025414,1.667920963906612,0.9,accepted,,False,False
+T_HADHW-1,Hadyard Hill Wind Farm,SSE Renewables Wind Farms,130.0,Hadyard Hill,120,Scotland,55.256823341011376,-4.731906523509732,1.0,accepted,,True,False
+T_CUMHW-2,T_CUMHW-2,CUMBERHEAD WEST WIND FARM LTD,126.0,A'Chruach (Phase 1),48.3,Scotland,56.15276760132366,-5.310216220516906,0.5,unmatched,,True,False
+T_VKNGW-2,Viking Energy Windfarm BMU-2,Viking Energy Wind Farm LLP,121.8,Viking Wind Farm,443,Scotland,60.3393253898048,-1.2084285919760123,0.9,accepted,,True,True
+T_VKNGW-1,Viking Energy Windfarm BMU-1,Viking Energy Wind Farm LLP,121.8,Viking Wind Farm,443,Scotland,60.3393253898048,-1.2084285919760123,0.9,accepted,,True,True
+T_VKNGW-3,Viking Energy Windfarm BMU-3,Viking Energy Wind Farm LLP,121.8,Viking Wind Farm,443,Scotland,60.3393253898048,-1.2084285919760123,0.9,accepted,,True,True
+T_VKNGW-4,Viking Energy Windfarm BMU-4,Viking Energy Wind Farm LLP,121.8,Viking Wind Farm,443,Scotland,60.3393253898048,-1.2084285919760123,0.9,accepted,,True,True
+T_BLLA-1,T_BLLA-1,SP Renewables (UK) Limited,118.0,Tow Law Wind Farm,2.6,England,54.76380395940492,-1.82280011955212,0.615,review,,False,False
+T_RREW-1,T_RREW-1,RWE Renewables UK Robin Rigg,114.293,Barrow,90,England,53.99146185098493,-3.298284394348813,0.5,unmatched,,False,False
+T_ARCHW-1,Arecleoch,SP Renewables (UK) Limited,114.0,Arecleoch Windfarm,120,Scotland,55.06878497205822,-4.797053507264143,1.0,accepted,,True,False
+T_HMGTO-2,Humber Offshore Wind Farm BMU2,RWE Renewables UK Humber Wind,111.0,Berry Burn,66.7,Scotland,57.446611032979845,-3.4753925365795815,0.571,unmatched,,True,True
+T_BEINW-1,Beinneun Wind farm,Beinneun Wind Farm Ltd,108.8,Beinneun Windfarm Extension,23.8,Scotland,57.095605803530056,-4.96548104707889,1.0,accepted,,True,True
+T_GNFSW-1,Gunfleet Sands 1,Gunfleet Sands Limited,108.0,Gunfleet Sands II,64.8,England,51.727189344092245,1.2459247308644263,0.903,accepted,,False,False
+T_BHLAW-1,Bhlaraidh Windfarm 1,SSE Generation Ltd,108.0,Bhlaraidh (previously Balmacaan),110,Scotland,57.21914701357764,-4.581905437398852,0.9,accepted,,True,True
+T_DDGNO-1,Dudgeon Generator BMU 1,Dudgeon Offshore Wind Ltd,108.0,Dudgeon East,402,England,53.117460061907245,0.6134682278857118,0.9,accepted,,False,False
+T_HMGTO-1,Humber Offshore Wind Farm BMU1,RWE Renewables UK Humber Wind,108.0,Berry Burn,66.7,Scotland,57.446611032979845,-3.4753925365795815,0.571,unmatched,,True,True
+T_STLGW-3,Stronelairg Windfarm 3,Stronelairg Windfarm Limited,108.0,Stronelairg Wind Farm,227.7,Scotland,57.126924519131,-4.5263699907224115,1.0,accepted,,True,True
+T_STLGW-1,Stronelairg Windfarm 1,Stronelairg Windfarm Limited,108.0,Stronelairg Wind Farm,227.7,Scotland,57.126924519131,-4.5263699907224115,1.0,accepted,,True,True
+T_STLGW-2,Stronelairg Windfarm 2,Stronelairg Windfarm Limited,108.0,Stronelairg Wind Farm,227.7,Scotland,57.126924519131,-4.5263699907224115,1.0,accepted,,True,True
+T_LIMKW-1,Limekiln Wind Farm,Limekiln Extension Ltd,106.0,Limekiln Wind Farm,79.8,Scotland,58.52848317525782,-3.7420493805883424,1.0,accepted,,True,True
+T_NOKYW-2,North Kyle Wind Farm-2,North Kyle Wind farm Ltd,106.0,South Kyle Wind Farm,240,Scotland,55.317334518247506,-4.293183075218487,1.0,accepted,,True,False
+T_NOKYW-1,North Kyle Wind Farm-1,North Kyle Wind farm Ltd,106.0,South Kyle Wind Farm,240,Scotland,55.317334518247506,-4.293183075218487,1.0,accepted,,True,False
+T_GRIFW-2,Griffin Wind Farm 2,Griffin Wind Farm Ltd,104.0,Griffin Wind farm,156,Scotland,56.581222522433,-3.7337523701724793,1.0,accepted,,True,True
+T_DDGNO-3,Dudgeon Generator BMU 3,Dudgeon Offshore Wind Ltd,102.0,Dudgeon East,402,England,53.117460061907245,0.6134682278857118,0.9,accepted,,False,False
+T_GRIFW-1,Griffin Wind Farm 1,Griffin Wind Farm Ltd,102.0,Griffin Wind farm,156,Scotland,56.581222522433,-3.7337523701724793,1.0,accepted,,True,True
+T_DDGNO-4,Dudgeon Generator BMU 4,Dudgeon Offshore Wind Ltd,102.0,Dudgeon East,402,England,53.117460061907245,0.6134682278857118,0.9,accepted,,False,False
+T_DUNGW-1,Dunmglass Windfarm 1,Dunmaglass Wind Farm Limited,100.0,Dunmaglass Wind Farm,94,Scotland,57.25148006944491,-4.255802337851775,0.947,accepted,,True,True
+T_ABRBO-1,ABRBO-1,Aberdeen Offshore Wind Farm,99.0,Barrow,90,England,53.99146185098493,-3.298284394348813,0.545,unmatched,,False,False
+T_CREAW-1,Creag Riabhach Wind Farm,Creag Riabhach Wind Farm Ltd,93.0,Creag Riabhach Wind Farm,92.4,Scotland,58.21930056281828,-4.511210384197758,1.0,accepted,,True,True
+T_FARR-2,Farr Unit 2,Smartestenergy Limited,92.0,Farr Wind Farm,92,Scotland,57.33392061775464,-4.103012495227077,0.9,accepted,,True,True
+T_FARR-1,Farr Unit 1,Smartestenergy Limited,92.0,Farr Wind Farm,92,Scotland,57.33392061775464,-4.103012495227077,0.9,accepted,,True,True
+T_RRWW-1,T_RRWW-1,RWE Renewables UK Robin Rigg,90.838,Barrow,90,England,53.99146185098493,-3.298284394348813,0.5,unmatched,,False,False
+T_DDGNO-2,Dudgeon Generator BMU 2,Dudgeon Offshore Wind Ltd,90.0,Dudgeon East,402,England,53.117460061907245,0.6134682278857118,0.9,accepted,,False,False
+T_BOWLW-1,Barrow Offshore Wind,Barrow Offshore Wind Limited,90.0,Barrow,90,England,53.99146185098493,-3.298284394348813,1.0,accepted,,False,False
+T_KPMRW-1,KYPE MUIR WIND FARM,OnPath Energy Limited,89.0,Kype Muir Wind Farm Extension,67.2,Scotland,55.632651616712636,-4.036104942819622,1.0,accepted,,True,False
+T_GANW-24,Galloper OSP 24,Galloper Offshore WindFarm Ltd,88.0,Galloper Wind Farm,353,England,51.87999173192822,2.0399934355980855,1.0,accepted,,False,False
+T_GANW-13,Galloper OSP 13,Galloper Offshore WindFarm Ltd,88.0,Galloper Wind Farm,353,England,51.87999173192822,2.0399934355980855,1.0,accepted,,False,False
+T_GANW-11,Galloper OSP 11,Galloper Offshore WindFarm Ltd,88.0,Galloper Wind Farm,353,England,51.87999173192822,2.0399934355980855,1.0,accepted,,False,False
+T_SAKNW-1,Sandy Knowe Wind Farm,Sandy Knowe Wind Farm Ltd,87.0,Sandy Knowe Wind Farm,81.6,Scotland,55.37214738988418,-4.0513445486984265,1.0,accepted,,True,False
+T_GORDW-1,Gordon Bush,SSE Generation Ltd,86.764,Gordonbush (extension),47,Scotland,58.08821976861972,-3.9588616362831224,0.952,accepted,,True,True
+T_PLOEW-1,PENCLOE WIND 1,PENCLOE WIND ENERGY LIMITED,81.0,Pencloe Wind Farm,81,Scotland,55.36874563974651,-4.24778615771635,0.9,accepted,,True,False
+T_DRSLW-1,Dersalloch Windfarm,SP Renewables (UK) Limited,70.9,Dersalloch,69,Scotland,55.304257199722514,-4.488218013953558,1.0,accepted,,True,False
+T_ENHLW-1,Enoch Hill Wind Farm,RWE Generation UK plc,70.0,Enoch Hill,70,Scotland,55.35583850296002,-4.235064380153561,1.0,accepted,,True,False
+T_STRNW-1,Strathy North Wind Farm 1,Strathy Wind Farm Limited,70.0,Strathy South,208,Scotland,58.43995370169887,-4.0735311815665725,1.0,accepted,,True,True
+T_BLLA-2,Black Law Windfarm Extension,SP Renewables (UK) Limited,69.0,Black Law,124,Scotland,55.76218897974121,-3.762566605098417,1.0,accepted,,True,False
+T_CGTHW-1,Corriegarth WF,Corriegarth Wind Energy LTD,69.0,Corriegarth,69.5,Scotland,57.190084558112524,-4.359638023950258,1.0,accepted,,True,True
+T_LCLTW-1,Lochluichart Windfarm,Eneco Energy Trade,69.0,Lochluichart,51,Scotland,57.65459417039496,-4.816701149722273,1.0,accepted,,True,True
+T_KILBW-1,KILBW,Kilbraur Wind Energy Ltd,68.51,Kilbraur Windfarm,47.5,Scotland,58.04040163757691,-4.058804857595992,0.615,review,,True,True
+T_BENBW-1,Benbrack WF,Benbrack Wind Farm Limited,67.0,Benbrack Wind Farm,67.1,Scotland,55.26718514633642,-4.311967409497722,1.0,accepted,,True,False
+T_KYPEW-1,KYPE MUIR EXT WIND FARM,Kype Extension Wind Farm Ltd,67.0,Kype Muir Wind Farm Extension,67.2,Scotland,55.632651616712636,-4.036104942819622,0.9,accepted,,True,False
+T_DWEXW-1,Douglas West Extension,Douglas West Extension Ltd,65.51,Douglas West Wind Farm (extension),78,Scotland,55.58735750575257,-3.8901038330510698,1.0,accepted,,True,False
+T_MILWW-1,MILWW,Millennium Wind Energy Ltd,65.0,Westmill Wind Farm,6.5,England,51.61577720724279,-1.6660633805921579,0.667,review,,False,False
+T_GNFSW-2,Gunfleet Sands 2,Gunfleet Sands II Limited,64.48,Gunfleet Sands II,64.8,England,51.727189344092245,1.2459247308644263,0.903,accepted,,False,False
+T_AKGLW-2,AIKENGALL II,Aikengall 2 CWCL,63.84,"Aikengall II, Wester Dod Community Wind Farm",60.8,Scotland,55.917208733815976,-2.4900662877040944,0.9,accepted,,True,False
+T_WISTW-2,Brockloch Rig 2 WF Exp A,BROCKLOCH RIG WINDFARM LTD,61.5,Brochloch Rig 1 (formerly Windy Standard),21.6,Scotland,55.29706494445242,-4.182939377786245,0.571,unmatched,,True,False
+T_KENNW-1,Kennoxhead Wind Farm,Kennoxhead Wind Farm Limited,60.0,Kennoxhead Wind Farm,62,Scotland,55.49791780961516,-3.9463100918999765,1.0,accepted,,True,False
+T_GORDW-2,Gordonbush WF Extension,SSE Generation Ltd,58.733,Gordonbush (extension),47,Scotland,58.08821976861972,-3.9588616362831224,1.0,accepted,,True,True
+T_BLKWW-1,Blackcraig Windfarm,Blackcraig Wind Farm Limited,56.216,Blackcraig,52.9,Scotland,55.11991239799602,-4.0321180807000685,1.0,accepted,,True,False
+T_GLWSW-1,Galawhistle Wind Farm,GALAWHISTLE WIND FARM,55.2,Galawhistle,66,Scotland,55.53957495446019,-3.9754222827482066,1.0,accepted,,True,False
+T_MKHLW-1,Mark Hill,SP Renewables (UK) Limited,53.84,Mark Hill,56,Scotland,55.12837305379461,-4.746310375516403,1.0,accepted,,True,False
+T_GLNKW-1,GLEN KYLLACHY WINDFARM,EDF Energy Customers Limited,52.0,Glen Kyllachy Wind Farm,48.5,Scotland,57.32073186592512,-4.08565012619048,1.0,accepted,,True,True
+T_CUMHW-1,Cumberhead wind energy limited,Uniper UK Limited,52.0,Cumberhead West Wind Farm,126,Scotland,55.59901826759933,-3.887474246458565,0.9,accepted,,True,False
+T_MIDMW-1,MIDDLE MUIR WIND FARM,OnPath Energy Limited,51.0,Middle Muir Wind Farm,51,Scotland,55.512885933756024,-3.804016992486902,1.0,accepted,,True,False
+T_AFTOW-1,Afton Wind Farm,Afton Wind Farm Limited,50.0,Afton Wind Farm,50,Scotland,55.3116001968864,-4.17428302347659,1.0,accepted,,True,False
+T_CRYRW-4,Crystal Rig IV Wind Farm,Erova Energy Limited,48.2,Crystal Rig Wind Farm Phase IV,48,Scotland,55.90308132519685,-2.5277610613052546,1.0,accepted,,True,False
+T_CRMLW-1,Corriemoillie,EDF Energy Customers Limited,48.0,Corriemoillie,54.4,Scotland,57.66872565617344,-4.773018029760207,1.0,accepted,,True,True
+T_BROCW-1,Broken Cross WF,Smartestenergy Limited,48.0,Broken Cross (Former Surface Mine),48,Scotland,55.60449893482157,-3.816174252082657,0.9,accepted,,True,False
+T_CRGHW-1,Carraig Gheal Wind Farm,Statkraft Markets Gmbh,46.0,Carraig Gheal,46,Scotland,56.339010418949655,-5.294537321952413,1.0,accepted,,True,True
+T_DOUGW-1,T-DOUGW-1,Erova Energy Limited,45.0,Douglas West Wind Farm (extension),78,Scotland,55.58735750575257,-3.8901038330510698,0.571,unmatched,,True,False
+T_DALQW-1,Dalquhandy  Wind Farm,Statkraft Markets Gmbh,42.846,Dalquhandy Windfarm,42,Scotland,55.18060663369498,-4.909575510558889,1.0,accepted,,True,False
+T_WDRGW-1,Windy Rig Wind Farm,Windy Rig Wind Farm Limited,42.8,Windy Rig Wind Farm,43,Scotland,55.27467312432234,-4.178561474848133,1.0,accepted,,True,False
+T_ACHRW-1,AChruach Wind Farm,Mobius Renewables Gen. (GB2,42.6,A'Chruach (Phase 1),48.3,Scotland,56.15276760132366,-5.310216220516906,0.941,accepted,,True,False
+T_EDINW-1,Edinbane Windfarm,Vattenfall Wind Power Ltd,41.4,Edinbane Wind Farm,41.4,Scotland,57.46912682028172,-6.432206098199516,1.0,accepted,,True,True
+T_EWHLW-1,Ewe Hill II Windfarm,SP Renewables (UK) Limited,38.0,Ewe Hill (extension),36.8,Scotland,55.10709221706526,-3.333868979519691,0.9,accepted,,True,False
+T_TWSHW-1,Twenty Shilling Wind Farm,Twentyshilling Limited,37.8,Twentyshilling Hill Wind Farm,37.8,Scotland,55.31976356093614,-3.9004833500249454,0.824,review,,True,False
+T_SANQW-1,SANQUHAR,SANQUHAR CWCL,32.08,Sanquhar Community Windfarm,32.4,Scotland,55.34417698550055,-4.0465703479660275,0.9,accepted,,True,False
+T_TDBNW-1,Toddleburn,SSE Generation Ltd,31.6,Toddleburn,27.6,Scotland,55.76855269537964,-2.8773910082852336,1.0,accepted,,True,False
+T_HAHAW-1,Hagshaw Repower 1,HAGSHAW HILL REPOWERING LTD,30.258,Hagshaw Hill (Repowering),84,Scotland,55.55942256061145,-3.870986721452006,0.789,review,,True,False
+T_HALSW-1,Halsary Windfarm,SP Renewables (UK) Limited,30.0,Halsary Wind Farm,34,Scotland,58.43089974308122,-3.4444471502354204,1.0,accepted,,True,True
+T_DNLWW-1,Dunlaw Extension,SP Renewables (UK) Limited,29.75,Dun Law,17.2,Scotland,55.806457153249696,-2.846031565252738,0.923,accepted,,True,False
+T_WHIHW-1,Whiteside Hill WF,Whiteside Hill,27.52,Whiteside Hill,25.3,Scotland,55.35741391262621,-4.029442075056163,1.0,accepted,,True,False
+T_MYGPW-1,Minnygap Wind Farm,Minnygap Energy Limited,25.0,Minnygap,25,Scotland,55.24876801079651,-3.5148021405721197,1.0,accepted,,True,False
+T_CRDEW-1,Crossdykes WF-1,EDF Energy Customers Limited,24.0,Crossdykes,48,Scotland,55.1761484100541,-3.1728699866762597,1.0,accepted,,True,False
+T_CRDEW-2,Crossdykes WF-2,EDF Energy Customers Limited,24.0,Crossdykes,48,Scotland,55.1761484100541,-3.1728699866762597,1.0,accepted,,True,False
+T_FSDLW-1,Freasdail Wind Farm,Freasdail Energy Limited,22.2,Freasdail Wind Farm,22.5,Scotland,55.77701055393306,-5.470638736814855,1.0,accepted,,True,False
+T_GNAPW-1,Glen App Windfarm,SP Renewables (UK) Limited,22.0,Glen App,22,Scotland,55.00066067963829,-4.989675973919238,1.0,accepted,,True,False
+T_COUWW-1,Cour Wind Farm,Cour Wind farm (Scotland) Ltd,20.5,Cour Wind Farm,20.5,Scotland,55.680679071938755,-5.484928577654593,1.0,accepted,,True,False
+T_ANSUW-1,An Suidhe 1,Statkraft Markets Gmbh,19.36,An Suidhe,19.3,Scotland,56.21866506121188,-5.21936666002629,1.0,accepted,,True,True
+T_TRLGW-1,T_TRLGW-1,Smartestenergy Limited,18.742,Tow Law Wind Farm,2.6,England,54.76380395940492,-1.82280011955212,0.571,unmatched,,False,False
+T_CRYRW-3,Crystal Rig III,Eneco Energy Trade,13.8,Crystal Rig Wind Farm Phase III,13.8,Scotland,55.92641320134755,-2.534479571986365,1.0,accepted,,True,False
+T_PGBIW-1,Pogbie WF,EDF Energy Customers Limited,10.0,Pogbie Wind Farm 1,5.1,Scotland,55.821847948471,-2.833022462855173,1.0,accepted,,True,False
+T_KTHLW-1,KEITH HILL WINDFARM,Statkraft Markets Gmbh,4.54,Keith Hill,4.5,Scotland,55.81727154871255,-2.8254559263536616,1.0,accepted,,True,False
