@@ -18,3 +18,5 @@ mlruns/
 
 *.egg-info/
 .DS_Store
+
+scripts/tempCodeRunnerFile.py
