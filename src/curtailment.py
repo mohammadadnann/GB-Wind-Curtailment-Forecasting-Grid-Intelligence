@@ -1,15 +1,21 @@
-"""Deriving curtailed volume from physical notifications and acceptances.
+"""Curtailment derivation from physical notifications and acceptances.
 
-Curtailment is not published anywhere, so it has to be constructed. The method
-I am following is to rebuild two minute by minute profiles for each unit day, 
-the level the operator intended to generate (PN) and the level NESO instructed 
-(BOAL) and then integrate the gap between them.
+Curtailment is not a published dataset. It is derived by comparing what a
+wind unit planned to generate (PN) with what NESO instructed it to generate
+(BOAL), minute by minute, then integrating the gap over each settlement period.
 
-NESO issues a new instruction roughly every 20 minutes. Each new instruction replaces 
-the previous one, extends the hold period and cancels the planned increase in output. 
-If the data is read row by row, it shows increases that never happened and 
-underestimates curtailment. Therefore, for each minute, I use the most recently 
-accepted instruction that was active at that time.
+The key difficulty is that NESO reissues instructions every ~20 minutes. Each
+new acceptance supersedes earlier ones for the minutes it covers, cancelling
+ramps that never actually happened. Reading rows naively would understate
+curtailment badly. The fix is to process acceptances in issuance-time order
+and let later ones overwrite earlier ones at each minute.
+
+Settlement periods run from local midnight to local midnight, not UTC midnight.
+On UK clock change days this means 46 periods (spring) or 50 periods (autumn).
+The grid must be built in local time and converted to UTC to handle this
+correctly. Clock hour based period numbering fails on the autumn change because
+the same clock hour appears twice  sequential numbering from position in the
+sorted minute index is the correct approach.
 """
 
 from __future__ import annotations
@@ -21,37 +27,30 @@ MINUTES_PER_HOUR = 60
 
 
 def minute_grid(day: str) -> pd.DatetimeIndex:
-    """Building the UTC minute grid for one local settlement day.
+    """Build the UTC minute grid for one local settlement day.
 
-    Elexon's settlementDate is a local calendar date, so during BST the day
-    actually starts at 23:00 UTC the day before. Building the grid on day
-    treated as a UTC calendar date silently drops the last hour of BST days,
-    since rows near a local midnight carry UTC timeFrom values that fall
-    before a UTC based grid for that settlementDate would start.
+    Grid runs from local midnight to the next local midnight, converted to UTC.
+    This gives 1,380 minutes on spring clock-change days, 1,440 on normal days,
+    and 1,500 on autumn clock-change days.
     """
-    start = pd.Timestamp(f"{day} 00:00", tz="Europe/London").tz_convert("UTC")
-    end = start + pd.Timedelta(hours=23, minutes=59)
-    return pd.date_range(start, end, freq="1min", tz="UTC")
+    start = pd.Timestamp(day, tz="Europe/London")
+    end = start + pd.DateOffset(days=1)
+    return pd.date_range(start, end, freq="1min", tz="Europe/London", inclusive="left").tz_convert("UTC")
 
 
 def to_utc(frame: pd.DataFrame, columns: tuple[str, ...]) -> pd.DataFrame:
-    """Forcing timestamp columns to UTC aware, since DuckDB returns them naive.
-
-    Naming the format explicitly stops pandas falling back to parsing each
-    value one at a time, which was the slow path on the full backfill.
-    """
+    """Parse timestamp columns to UTC-aware datetimes."""
     out = frame.copy()
-    for column in columns:
-        out[column] = pd.to_datetime(
-            out[column], utc=True, format="ISO8601", errors="coerce"
-        )
+    for col in columns:
+        out[col] = pd.to_datetime(out[col], utc=True, format="ISO8601", errors="coerce")
     return out
 
 
 def interpolate_levels(rows: pd.DataFrame, day: str) -> pd.Series:
-    """Interpolating a level profile minute by minute, later rows winning.
+    """Interpolate a piecewise-linear level profile onto the minute grid.
 
-    Used for PN, where rows do not supersede each other but can be restated.
+    Used for PN. Each row defines a ramp from levelFrom to levelTo between
+    timeFrom and timeTo. Later rows overwrite earlier ones where they overlap.
     """
     frame = to_utc(rows, ("timeFrom", "timeTo")).sort_values("timeFrom")
     grid = minute_grid(day)
@@ -62,6 +61,8 @@ def interpolate_levels(rows: pd.DataFrame, day: str) -> pd.Series:
         if window.empty:
             continue
         span = (row.timeTo - row.timeFrom).total_seconds()
+        if span <= 0:
+            continue
         elapsed = (window - row.timeFrom).total_seconds()
         level.loc[window] = row.levelFrom + (row.levelTo - row.levelFrom) * elapsed / span
 
@@ -69,11 +70,12 @@ def interpolate_levels(rows: pd.DataFrame, day: str) -> pd.Series:
 
 
 def effective_instruction(rows: pd.DataFrame, day: str) -> pd.Series:
-    """Rebuilding the instructed level, respecting superseded acceptances.
+    """Reconstruct the instructed level at each minute, respecting superseding.
 
-    Later acceptances override earlier ones for any minute they both cover,
-    which is what makes a rolling hold at zero visible instead of a sequence
-    of ramps that were cancelled before they happened.
+    Acceptances are processed in ascending acceptanceTime order. Each one
+    overwrites any earlier acceptance for the minutes it covers, producing the
+    actual hold the unit was subject to rather than the sequence of ramps that
+    were cancelled.
     """
     frame = to_utc(rows, ("timeFrom", "timeTo", "acceptanceTime"))
     frame = frame.sort_values("acceptanceTime")
@@ -86,8 +88,9 @@ def effective_instruction(rows: pd.DataFrame, day: str) -> pd.Series:
         window = grid[(grid >= row.timeFrom) & (grid < row.timeTo)]
         if window.empty:
             continue
-
         span = (row.timeTo - row.timeFrom).total_seconds()
+        if span <= 0:
+            continue
         elapsed = (window - row.timeFrom).total_seconds()
         values = row.levelFrom + (row.levelTo - row.levelFrom) * elapsed / span
         newer = issued[window].isna() | (issued[window] <= row.acceptanceTime)
@@ -98,33 +101,43 @@ def effective_instruction(rows: pd.DataFrame, day: str) -> pd.Series:
 
 
 def curtailed_profile(pn_rows: pd.DataFrame, boal_rows: pd.DataFrame, day: str) -> pd.Series:
-    """Returning curtailed MW minute by minute for one unit-day.
+    """Return curtailed MW at each minute for one unit-day.
 
-    Where there is no instruction the unit follows its own notification, so
-    filling the instructed level with PN makes those minutes zero rather than
-    missing.
+    Where no instruction covers a minute the unit follows its own PN,
+    so those minutes contribute zero curtailment.
     """
     pn = interpolate_levels(pn_rows, day)
-    boal = effective_instruction(boal_rows, day) if not boal_rows.empty else pd.Series(
-        np.nan, index=minute_grid(day)
-    )
+    if boal_rows.empty:
+        boal = pd.Series(np.nan, index=minute_grid(day))
+    else:
+        boal = effective_instruction(boal_rows, day)
     return (pn - boal.fillna(pn)).clip(lower=0)
 
 
 def to_settlement_periods(profile: pd.Series, day: str) -> pd.DataFrame:
-    """Aggregating a minute profile into settlement period volumes.
+    """Aggregate a minute-level profile into settlement period MWh.
 
-    Settlement periods run from local midnight rather than UTC midnight, so I
-    convert to London time before numbering them. Without this the half hours
-    either side of a UTC day boundary get numbered from two different daily
-    runs and the same minute is counted twice.
+    Periods are numbered sequentially from 1 based on position within the
+    local day, not from clock hours. This handles the autumn clock change
+    correctly: the repeated clock hour would produce duplicate period numbers
+    if clock hours were used, but sequential numbering always produces
+    1 through 46, 48 or 50 with no gaps or duplicates.
     """
-    frame = profile.rename("curtailed_mw").to_frame()
-    local = frame.index.tz_convert("Europe/London")
+    grid = minute_grid(day)
+    local_dates = grid.tz_convert("Europe/London").date
 
-    frame["settlementDate"] = local.date.astype(str)
-    minutes_in = local.hour * 60 + local.minute
-    frame["settlementPeriod"] = (minutes_in // 30) + 1
+    frame = profile.rename("curtailed_mw").to_frame()
+    frame["settlementDate"] = [str(d) for d in local_dates]
+
+    # Sequential position within the local day, one-indexed
+    date_arr = np.array([str(d) for d in local_dates])
+    period = np.zeros(len(frame), dtype=int)
+    for date in np.unique(date_arr):
+        mask = date_arr == date
+        positions = np.where(mask)[0]
+        period[positions] = np.arange(1, len(positions) + 1)
+
+    frame["settlementPeriod"] = (period - 1) // 30 + 1
 
     grouped = frame.groupby(["settlementDate", "settlementPeriod"], as_index=False).agg(
         curtailed_mw_mean=("curtailed_mw", "mean"),
