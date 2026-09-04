@@ -1,0 +1,19 @@
+feature,source,event_time,publication_time,earliest_availability,transformation,valid_at_cutoff,notes
+curtailment_lag_2d,derived target,D-2 settlement,D-2 settlement + 1h,D-1 00:00 UTC,shift(96) on half-hourly series,YES,Two full settlement days before D. Conservative and safe.
+curtailment_lag_7d,derived target,D-7 settlement,D-7 settlement + 1h,D-8 00:00 UTC,shift(336) on half-hourly series,YES,Seven days before D. Used for weekly seasonal pattern.
+curtailment_roll_mean_7d,derived target,D-2 to D-8,various,D-1 00:00 UTC,rolling(336).mean() applied after shift(96),YES,Mean of 7 days ending at D-2. All values available by cut-off.
+constrained_roll_mean_7d,derived target,D-2 to D-8,various,D-1 00:00 UTC,rolling(336).mean() on is_constrained after shift(96),YES,Frequency of constrained periods over prior 7 days.
+month,settlement timestamp,D,always known,always known,local month integer,YES,Calendar feature derived from the forecast timestamp itself.
+hour,settlement timestamp,D,always known,always known,local hour integer,YES,Hour of day derived from the forecast timestamp.
+day_of_week,settlement timestamp,D,always known,always known,integer 0-6,YES,Day of week derived from the forecast timestamp.
+season,settlement timestamp,D,always known,always known,month // 3 integer,YES,Derived from month.
+is_weekend,settlement timestamp,D,always known,always known,binary flag,YES,Derived from day of week.
+overnight_trough_flag,settlement timestamp,D,always known,always known,binary flag hours 01-05,YES,Low-demand overnight window known from timestamp.
+wind_speed_100m,Open-Meteo historical forecast API,D (target hour),approximated D-1 06:00 UTC model run,D-1 ~06:00 UTC,capacity-weighted mean across clusters,APPROXIMATE,API stitches NWP model runs but does not expose issuance timestamps. Assumed available from D-1 06:00 UTC run. Treat as moderate leakage risk.
+wind_speed_100m_cubed,derived from wind_speed_100m,D,approximated D-1 06:00 UTC,D-1 ~06:00 UTC,element-wise cube,APPROXIMATE,Same caveat as wind_speed_100m.
+wind_gust_10m,Open-Meteo historical forecast API,D,approximated D-1 06:00 UTC,D-1 ~06:00 UTC,max across clusters,APPROXIMATE,Same caveat as wind_speed_100m.
+wind_direction_sin,Open-Meteo historical forecast API,D,approximated D-1 06:00 UTC,D-1 ~06:00 UTC,sin of capacity-weighted circular mean,APPROXIMATE,Circular mean computed correctly using sin/cos components.
+wind_direction_cos,Open-Meteo historical forecast API,D,approximated D-1 06:00 UTC,D-1 ~06:00 UTC,cos of capacity-weighted circular mean,APPROXIMATE,Circular mean computed correctly using sin/cos components.
+b6_limit_mw,NESO constraint flows and limits,D-1 day-ahead,published D-1 before 11:00 UTC,D-1 before 11:00 UTC,raw limit value,YES,Day-ahead boundary limit. Published before the forecast cut-off.
+b6_limit_vs_30d_median,derived from b6_limit_mw,D-1,D-1 before 11:00 UTC,D-1 before 11:00 UTC,ratio of current limit to 30-day rolling median,YES,Outage proxy. All inputs available by cut-off.
+b6_outage_flag,derived from b6_limit_mw,D-1,D-1 before 11:00 UTC,D-1 before 11:00 UTC,binary flag when ratio < 0.9,YES,Derived entirely from b6_limit_mw which is valid.
