@@ -20,3 +20,6 @@ mlruns/
 .DS_Store
 
 scripts/tempCodeRunnerFile.py
+
+# model binaries
+models/*.joblibgit add scripts/13_battery_backtest.py

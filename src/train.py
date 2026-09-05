@@ -133,9 +133,7 @@ def fit_hurdle(train: pd.DataFrame) -> tuple:
     return classifier, regressor
 
 
-def predict_hurdle(
-    classifier, regressor, test: pd.DataFrame
-) -> pd.Series:
+def predict_hurdle(classifier, regressor, test: pd.DataFrame) -> pd.Series:
     """Combine classifier and regressor into a point forecast."""
     X = test[FEATURE_COLUMNS]
     prob = classifier.predict_proba(X)[:, 1]
@@ -143,18 +141,14 @@ def predict_hurdle(
     volume = np.expm1(log_volume)
     return pd.Series(prob * volume, index=test.index)
 
+
 # --- quantile models ---
 
 QUANTILES = [0.1, 0.5, 0.9]
 
 
 def fit_quantile_models(train: pd.DataFrame) -> dict:
-    """Fit one quantile regressor per quantile on constrained periods only.
-
-    Trained on log1p-transformed target, same as the point regressor.
-    Each quantile is independent — no constraint tying them together,
-    which is why the raw band needs conformal widening after fitting.
-    """
+    """Fit one quantile regressor per quantile on constrained periods only."""
     import lightgbm as lgb
 
     clean = train.dropna(subset=FEATURE_COLUMNS + [TARGET])
@@ -182,14 +176,7 @@ def fit_quantile_models(train: pd.DataFrame) -> dict:
 def predict_quantiles(
     classifier, quantile_models: dict, test: pd.DataFrame
 ) -> pd.DataFrame:
-    """Combine classifier with quantile regressors.
-
-    Uses a zero-inflated mixture: for quantile q, if q falls below the
-    zero-mass probability (1 - p_constrained), the quantile is zero.
-    Only when q exceeds the zero mass does the continuous distribution
-    contribute. This is the statistically correct treatment for a
-    distribution with a point mass at zero.
-    """
+    """Combine classifier with quantile regressors using zero-inflated mixture."""
     X = test[FEATURE_COLUMNS]
     prob = classifier.predict_proba(X)[:, 1]
     prob_zero = 1 - prob
@@ -208,12 +195,7 @@ def fit_conformal_widening(
     calib: pd.DataFrame,
     target_coverage: float = 0.8,
 ) -> float:
-    """Find the smallest symmetric widening factor that achieves target coverage.
-
-    Fits on a held-out calibration slice the quantile models have not seen.
-    Searches over widening factors from 1.0 to 5.0 in steps of 0.05.
-    Returns the first factor achieving the target coverage.
-    """
+    """Find the smallest widening factor achieving target coverage on calibration slice."""
     predicted = predict_quantiles(classifier, quantile_models, calib)
     actual = calib[TARGET]
 
@@ -227,12 +209,11 @@ def fit_conformal_widening(
         inside = (aligned[TARGET] >= lower) & (aligned[TARGET] <= upper)
         if inside.mean() >= target_coverage:
             return round(float(factor), 3)
-
     return 5.0
 
 
 def apply_conformal_widening(predicted: pd.DataFrame, factor: float) -> pd.DataFrame:
-    """Apply the calibrated widening factor to a quantile prediction."""
+    """Apply calibrated widening factor to quantile predictions."""
     result = predicted.copy()
     result["p10"] = (predicted["p50"] - (predicted["p50"] - predicted["p10"]) * factor).clip(lower=0)
     result["p90"] = predicted["p50"] + (predicted["p90"] - predicted["p50"]) * factor
@@ -240,7 +221,7 @@ def apply_conformal_widening(predicted: pd.DataFrame, factor: float) -> pd.DataF
 
 
 def pinball_loss(actual: pd.Series, predicted: pd.Series, quantile: float) -> float:
-    """Pinball loss — the correct scoring rule for a quantile forecast."""
+    """Pinball loss — correct scoring rule for a quantile forecast."""
     aligned = pd.concat([actual, predicted], axis=1, keys=["a", "p"]).dropna()
     diff = aligned["a"] - aligned["p"]
     return float(np.mean(np.maximum(quantile * diff, (quantile - 1) * diff)))
@@ -255,18 +236,8 @@ def coverage(actual: pd.Series, lower: pd.Series, upper: pd.Series) -> float:
     return float(inside.mean())
 
 
-# --- cost model ---
-
 def fit_cost_model(train: pd.DataFrame):
-    """Fit a LightGBM regressor for constraint cost in pounds.
-
-    Cost is defined as curtailed_mwh * avg_bid_price_gbp_mwh. This is an
-    estimate, not a settled figure — real settlement depends on system
-    pricing rules not modelled here. The cost column must exist in the
-    feature table for this to run.
-
-    Trained on constrained periods only, same reasoning as the volume regressor.
-    """
+    """Fit a LightGBM regressor for constraint cost in pounds."""
     import lightgbm as lgb
 
     clean = train.dropna(subset=FEATURE_COLUMNS + ["curtailment_cost_gbp"])
@@ -300,18 +271,18 @@ def predict_cost(classifier, cost_model, test: pd.DataFrame) -> pd.Series:
 BATTERY_POWER_MW = 50
 BATTERY_ENERGY_MWH = 200
 ROUND_TRIP_EFFICIENCY = 0.9
-NOMINAL_PRICE_GBP_MWH = 60.0
 
 
-def simulate_battery(curtailed_mwh: pd.Series, charge_periods: pd.Series) -> float:
-    """Simulate a battery charging during curtailment and returning captured value.
+def curtailment_captured(
+    curtailed_mwh: pd.Series, charge_periods: pd.Series
+) -> float:
+    """MWh of curtailment captured by charging during selected periods.
 
-    charge_periods is a boolean series deciding which periods to charge during.
-    Using an explicit period set rather than a threshold ensures every strategy
-    gets an identical charging budget, making perfect foresight a genuine ceiling.
+    Respects battery power and energy limits. Measures capture only,
+    not round-trip economics, to avoid state-of-charge gaming.
     """
     state_of_charge = 0.0
-    value_gbp = 0.0
+    captured = 0.0
 
     for t, curtailed in curtailed_mwh.items():
         if charge_periods.get(t, False) and curtailed > 0:
@@ -321,12 +292,12 @@ def simulate_battery(curtailed_mwh: pd.Series, charge_periods: pd.Series) -> flo
                 curtailed,
             )
             state_of_charge += charge * ROUND_TRIP_EFFICIENCY
-            value_gbp += charge * NOMINAL_PRICE_GBP_MWH
+            captured += charge
         elif state_of_charge > 0:
             discharge = min(BATTERY_POWER_MW * 0.5, state_of_charge)
             state_of_charge -= discharge
 
-    return value_gbp
+    return captured
 
 
 def top_n_periods(signal: pd.Series, n: int) -> pd.Series:
@@ -336,23 +307,31 @@ def top_n_periods(signal: pd.Series, n: int) -> pd.Series:
 
 
 def battery_strategies(test: pd.DataFrame, predicted: pd.Series) -> dict:
-    """Compare four dispatch strategies on an identical charging budget.
+    """Compare four dispatch strategies on identical charging budget.
 
-    Budget: top half of periods by each strategy's own signal.
-    Perfect foresight uses actual curtailment — it is the ceiling.
+    Metric is MWh of curtailment captured, not financial value.
+    Budget equals the number of periods with actual curtailment — this
+    ensures perfect foresight is a genuine ceiling, not an artefact
+    of an oversized budget.
     """
     actual = test[TARGET]
-    budget = len(actual) // 2
+    budget = int((actual > 0).sum())
 
     fixed_signal = pd.Series(
         test.index.hour.isin(range(1, 6)).astype(float), index=test.index
     )
 
     return {
-        "no_forecast": simulate_battery(actual, top_n_periods(fixed_signal, budget)),
-        "persistence": simulate_battery(
+        "no_forecast_mwh": curtailment_captured(
+            actual, top_n_periods(fixed_signal, budget)
+        ),
+        "persistence_mwh": curtailment_captured(
             actual, top_n_periods(test["curtailment_lag_2d"].fillna(0), budget)
         ),
-        "model": simulate_battery(actual, top_n_periods(predicted, budget)),
-        "perfect_foresight": simulate_battery(actual, top_n_periods(actual, budget)),
+        "model_mwh": curtailment_captured(
+            actual, top_n_periods(predicted, budget)
+        ),
+        "perfect_foresight_mwh": curtailment_captured(
+            actual, top_n_periods(actual, budget)
+        ),
     }
