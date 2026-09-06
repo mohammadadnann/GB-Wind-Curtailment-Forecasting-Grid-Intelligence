@@ -1,0 +1,27 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    command: uvicorn src.api:app --host 0.0.0.0 --port 8000
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  dashboard:
+    build: .
+    ports:
+      - "8501:8501"
+    command: streamlit run app/streamlit_app.py --server.address 0.0.0.0
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+    depends_on:
+      api:
+        condition: service_healthy

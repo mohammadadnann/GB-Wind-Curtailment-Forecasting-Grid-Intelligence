@@ -1,10 +1,9 @@
-"""SHAP analysis on held-out test examples from the final fold.
+"""SHAP analysis on held out test examples from the final fold.
 
 Global importance shows which features drive the model on average.
 Local explanation shows why the model predicted a specific value.
 Both use examples from the held-out test set — never training data.
 
-Run:  python scripts/12_shap_analysis.py
 """
 
 import numpy as np

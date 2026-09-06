@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "training_cutoff": "2026-03-30",
-  "training_periods": 52224,
+  "training_periods": 50826,
   "feature_columns": [
     "curtailment_lag_2d",
     "curtailment_lag_7d",
@@ -17,7 +17,10 @@
     "wind_speed_100m_cubed",
     "wind_gust_10m",
     "wind_direction_sin",
-    "wind_direction_cos"
+    "wind_direction_cos",
+    "b6_limit_mw",
+    "b6_limit_vs_30d_median",
+    "b6_outage_flag"
   ],
   "target": "curtailed_mwh",
   "model_architecture": "two-stage hurdle: LightGBM classifier + conditional regressor",

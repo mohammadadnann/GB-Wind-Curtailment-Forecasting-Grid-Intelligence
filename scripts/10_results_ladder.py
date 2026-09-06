@@ -1,6 +1,4 @@
 """Assemble the results ladder comparing baselines to the hurdle model.
-
-Run:  python scripts/10_results_ladder.py
 """
 
 import pandas as pd
@@ -28,8 +26,6 @@ def main() -> None:
 
     print("=" * 60)
     print("RESULTS LADDER — mean MAE and RMSE across folds")
-    print("Note: boundary features excluded (NESO file not downloaded)")
-    print("Note: weather features use approximated D-1 06:00 UTC vintage")
     print("=" * 60)
     print(ladder.to_string())
 

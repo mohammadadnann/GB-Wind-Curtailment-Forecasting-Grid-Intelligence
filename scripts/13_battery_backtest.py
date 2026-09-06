@@ -1,37 +1,15 @@
-"""Curtailment dispatch evaluation across all held-out test folds.
+"""Dispatch value evaluation across all held out test folds.
 
-Measures how well each strategy identifies constrained periods.
-Precision: of periods the strategy selects, what fraction are actually constrained?
-Recall: of constrained periods, what fraction does the strategy select?
-F1: harmonic mean of precision and recall.
+Measures the £ value of correctly identifying curtailed periods.
+Each strategy selects the same number of periods as the model.
+Perfect foresight identifies all curtailed periods.
+Value measured at £60/MWh nominal curtailment price.
 
-Run:  python scripts/13_battery_backtest.py
 """
 
 import pandas as pd
-import numpy as np
 
 from src import config, evaluate, train
-
-
-def evaluate_strategy(actual: pd.Series, signal: pd.Series, budget: int) -> dict:
-    """Evaluate a dispatch strategy using precision, recall and F1."""
-    selected = signal.nlargest(budget).index
-    actually_constrained = actual[actual > 0].index
-
-    true_positive = len(set(selected) & set(actually_constrained))
-    precision = true_positive / budget if budget > 0 else 0.0
-    recall = true_positive / len(actually_constrained) if len(actually_constrained) > 0 else 0.0
-    f1 = (2 * precision * recall / (precision + recall)
-          if (precision + recall) > 0 else 0.0)
-    curtailment_captured = actual[actual.index.isin(selected)].sum()
-
-    return {
-        "precision": round(precision, 3),
-        "recall": round(recall, 3),
-        "f1": round(f1, 3),
-        "curtailment_captured_mwh": round(curtailment_captured, 1),
-    }
 
 
 def main() -> None:
@@ -44,57 +22,53 @@ def main() -> None:
         classifier, regressor = train.fit_hurdle(train_frame)
         predicted = train.predict_hurdle(classifier, regressor, test_frame)
 
-        actual = test_frame[train.TARGET]
-        budget = int((actual > 0).sum())
+        strategies = train.battery_strategies(test_frame, predicted)
+        strategies["fold"] = fold.number
+        strategies["test_start"] = fold.test_start.date()
+        rows.append(strategies)
 
-        fixed_signal = pd.Series(
-            test_frame.index.hour.isin(range(1, 6)).astype(float),
-            index=test_frame.index,
-        )
-
-        strategies = {
-            "no_forecast": evaluate_strategy(actual, fixed_signal, budget),
-            "persistence": evaluate_strategy(
-                actual, test_frame["curtailment_lag_2d"].fillna(0), budget
-            ),
-            "model": evaluate_strategy(actual, predicted, budget),
-            "perfect_foresight": evaluate_strategy(actual, actual, budget),
-        }
-
-        for name, metrics in strategies.items():
-            rows.append({
-                "fold": fold.number,
-                "test_start": fold.test_start.date(),
-                "strategy": name,
-                **metrics,
-            })
-
-        model_f1 = strategies["model"]["f1"]
-        perfect_f1 = strategies["perfect_foresight"]["f1"]
         print(
             f"Fold {fold.number} ({fold.test_start.date()}): "
-            f"model F1={model_f1:.3f}  "
-            f"perfect F1={perfect_f1:.3f}  "
-            f"capture={model_f1/perfect_f1*100:.1f}%"
+            f"model=£{strategies['model_gbp']:,.0f}  "
+            f"perfect=£{strategies['perfect_foresight_gbp']:,.0f}  "
+            f"capture={strategies['model_capture_pct']:.1f}%"
         )
 
     results = pd.DataFrame(rows)
+    totals_model = results["model_gbp"].sum()
+    totals_perfect = results["perfect_foresight_gbp"].sum()
+    totals_persistence = results["persistence_gbp"].sum()
+    totals_no_forecast = results["no_forecast_gbp"].sum()
 
-    print("\nMean across folds by strategy:")
-    summary = (
-        results.groupby("strategy")[["precision", "recall", "f1", "curtailment_captured_mwh"]]
-        .mean()
-        .round(3)
-        .loc[["no_forecast", "persistence", "model", "perfect_foresight"]]
+    days_covered = sum(
+        (evaluate.split(frame, f)[1].index.max() -
+         evaluate.split(frame, f)[1].index.min()).days
+        for f in folds
     )
-    print(summary.to_string())
+    years_covered = days_covered / 365.25
+    fleet_mw = 11_608
 
-    model_f1 = summary.loc["model", "f1"]
-    perfect_f1 = summary.loc["perfect_foresight", "f1"]
-    print(f"\nModel captures {model_f1/perfect_f1*100:.1f}% of perfect foresight F1")
+    print("\nTotal £ value captured across all test folds:")
+    print(f"  no_forecast:       £{totals_no_forecast:,.0f}")
+    print(f"  persistence:       £{totals_persistence:,.0f}")
+    print(f"  model:             £{totals_model:,.0f}")
+    print(f"  perfect_foresight: £{totals_perfect:,.0f}")
 
-    results.to_csv(config.PROCESSED / "dispatch_results.csv", index=False)
-    print(f"\nWrote dispatch_results.csv")
+    pct = totals_model / totals_perfect * 100
+    print(f"\nModel captures {pct:.1f}% of perfect foresight value")
+
+    print(f"\nAnnualised per MW of Scottish fleet ({fleet_mw:,} MW):")
+    for name, total in [
+        ("no_forecast", totals_no_forecast),
+        ("persistence", totals_persistence),
+        ("model", totals_model),
+        ("perfect_foresight", totals_perfect),
+    ]:
+        per_mw = total / fleet_mw / years_covered
+        print(f"  {name:20s} £{per_mw:,.0f}/MW/year")
+
+    results.to_csv(config.PROCESSED / "battery_results.csv", index=False)
+    print(f"\nWrote battery_results.csv")
 
 
 if __name__ == "__main__":

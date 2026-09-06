@@ -1,17 +1,15 @@
-"""Baselines and hurdle model for curtailment point forecasting.
+"""Forecasting models for Scottish wind curtailment
 
-Model architecture: two-stage hurdle.
-  Stage 1 — LightGBM classifier: is this period constrained?
-  Stage 2 — LightGBM regressor: given constraint, how much MWh?
+I am using a two stage approach:
+  Stage 1 — a classifier that predicts whether a period will have any curtailment at all
+  Stage 2 — a regressor that predicts how much curtailment (in MWh), trained only on
+             periods that were actually curtailed
 
-The regressor trains only on constrained periods to avoid the zero-inflation
-problem. Predictions combine both stages: E[Y] = P(constrained) * E[Y | constrained].
+Combining both stages: predicted MWh = P(curtailed) × predicted volume if curtailed.
 
-The target is log1p-transformed before regression to compress the long tail
-of high-curtailment events. Predictions are back-transformed with expm1.
+The volume target is log transformed before training to handle the long tail of
+very large curtailment events, then converted back when making predictions.
 
-Baselines come first. A model that cannot beat persistence or the physical
-heuristic has not learned anything useful.
 """
 
 from __future__ import annotations
@@ -37,6 +35,9 @@ FEATURE_COLUMNS = [
     "wind_gust_10m",
     "wind_direction_sin",
     "wind_direction_cos",
+    "b6_limit_mw",
+    "b6_limit_vs_30d_median",
+    "b6_outage_flag",
 ]
 
 
@@ -77,12 +78,7 @@ def baseline_weekly(train: pd.DataFrame, test: pd.DataFrame) -> pd.Series:
 
 
 def baseline_physical(test: pd.DataFrame) -> pd.Series:
-    """Estimate curtailment from wind speed using a cubic power curve.
-
-    max(0, estimated_output - assumed_limit) is the simplest physically
-    grounded estimate. This requires no training and serves as a check
-    that the ML model learns something beyond basic physics.
-    """
+    """Estimate curtailment from wind speed using a cubic power curve."""
     fleet_capacity_mw = 12_000
     rated_speed = 12.0
     assumed_limit_mw = 4_000
@@ -98,11 +94,7 @@ def baseline_physical(test: pd.DataFrame) -> pd.Series:
 # --- hurdle model ---
 
 def fit_hurdle(train: pd.DataFrame) -> tuple:
-    """Fit the two-stage hurdle model.
-
-    Classifier trained on all periods.
-    Regressor trained only on constrained periods to avoid zero-inflation.
-    """
+    """Fit the two-stage hurdle model."""
     import lightgbm as lgb
 
     clean = train.dropna(subset=FEATURE_COLUMNS + [TARGET])
@@ -266,53 +258,48 @@ def predict_cost(classifier, cost_model, test: pd.DataFrame) -> pd.Series:
     return pd.Series(np.expm1(log_cost) * prob, index=test.index)
 
 
-# --- battery simulation ---
+# --- dispatch value simulation ---
 
-BATTERY_POWER_MW = 50
-BATTERY_ENERGY_MWH = 200
-ROUND_TRIP_EFFICIENCY = 0.9
+NOMINAL_PRICE_GBP_MWH = 60.0
 
 
-def curtailment_captured(
-    curtailed_mwh: pd.Series, charge_periods: pd.Series
-) -> float:
-    """MWh of curtailment captured by charging during selected periods.
+def dispatch_value(
+    curtailed_mwh: pd.Series,
+    signal: pd.Series,
+    n_select: int,
+) -> dict:
+    """Measure the £ value of acting on the top-n periods by signal.
 
-    Respects battery power and energy limits. Measures capture only,
-    not round-trip economics, to avoid state-of-charge gaming.
+    Selects the n periods with the highest signal. For each selected period
+    where curtailment actually occurs, the value captured is the actual
+    curtailed MWh at the nominal price. Perfect foresight uses actual
+    curtailment as its signal and is always the ceiling.
     """
-    state_of_charge = 0.0
-    captured = 0.0
+    selected = signal.nlargest(n_select).index
+    actual_selected = curtailed_mwh.reindex(selected).fillna(0.0)
+    true_positive_mwh = actual_selected[actual_selected > 0].sum()
+    value_gbp = true_positive_mwh * NOMINAL_PRICE_GBP_MWH
 
-    for t, curtailed in curtailed_mwh.items():
-        if charge_periods.get(t, False) and curtailed > 0:
-            charge = min(
-                BATTERY_POWER_MW * 0.5,
-                BATTERY_ENERGY_MWH - state_of_charge,
-                curtailed,
-            )
-            state_of_charge += charge * ROUND_TRIP_EFFICIENCY
-            captured += charge
-        elif state_of_charge > 0:
-            discharge = min(BATTERY_POWER_MW * 0.5, state_of_charge)
-            state_of_charge -= discharge
+    pf_selected = curtailed_mwh.nlargest(n_select).index
+    pf_mwh = curtailed_mwh.reindex(pf_selected).fillna(0.0).sum()
+    pf_gbp = pf_mwh * NOMINAL_PRICE_GBP_MWH
 
-    return captured
-
-
-def top_n_periods(signal: pd.Series, n: int) -> pd.Series:
-    """Mark the n periods with the highest signal as charge periods."""
-    top = signal.nlargest(n).index
-    return pd.Series(signal.index.isin(top), index=signal.index)
+    return {
+        "value_gbp": value_gbp,
+        "pf_gbp": pf_gbp,
+        "capture_pct": value_gbp / pf_gbp * 100 if pf_gbp > 0 else 0.0,
+        "true_positive_mwh": true_positive_mwh,
+        "pf_mwh": pf_mwh,
+    }
 
 
 def battery_strategies(test: pd.DataFrame, predicted: pd.Series) -> dict:
-    """Compare four dispatch strategies on identical charging budget.
+    """Compare four dispatch strategies on an identical selection budget.
 
-    Metric is MWh of curtailment captured, not financial value.
-    Budget equals the number of periods with actual curtailment — this
-    ensures perfect foresight is a genuine ceiling, not an artefact
-    of an oversized budget.
+    Budget equals the number of constrained periods in the test set.
+    Each strategy selects that many periods by its own signal.
+    Perfect foresight selects the top-n by actual curtailment — ceiling.
+    Value measured at £60/MWh nominal curtailment price.
     """
     actual = test[TARGET]
     budget = int((actual > 0).sum())
@@ -320,18 +307,19 @@ def battery_strategies(test: pd.DataFrame, predicted: pd.Series) -> dict:
     fixed_signal = pd.Series(
         test.index.hour.isin(range(1, 6)).astype(float), index=test.index
     )
+    persistence_signal = test["curtailment_lag_2d"].fillna(0)
+
+    no_forecast = dispatch_value(actual, fixed_signal, budget)
+    persistence = dispatch_value(actual, persistence_signal, budget)
+    model = dispatch_value(actual, predicted, budget)
+    perfect = dispatch_value(actual, actual, budget)
 
     return {
-        "no_forecast_mwh": curtailment_captured(
-            actual, top_n_periods(fixed_signal, budget)
-        ),
-        "persistence_mwh": curtailment_captured(
-            actual, top_n_periods(test["curtailment_lag_2d"].fillna(0), budget)
-        ),
-        "model_mwh": curtailment_captured(
-            actual, top_n_periods(predicted, budget)
-        ),
-        "perfect_foresight_mwh": curtailment_captured(
-            actual, top_n_periods(actual, budget)
-        ),
+        "no_forecast_gbp": no_forecast["value_gbp"],
+        "persistence_gbp": persistence["value_gbp"],
+        "model_gbp": model["value_gbp"],
+        "perfect_foresight_gbp": perfect["value_gbp"],
+        "model_capture_pct": model["capture_pct"],
+        "model_tp_mwh": model["true_positive_mwh"],
+        "pf_mwh": perfect["pf_mwh"],
     }

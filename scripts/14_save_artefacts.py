@@ -2,7 +2,7 @@
 
 The final models are trained on all available data (no test holdout) since
 they are intended for production inference, not evaluation. Evaluation
-metrics come from the rolling-origin backtest in scripts 08-13.
+metrics come from the rolling origin backtest in scripts 08-13.
 
 Artefacts saved:
   models/classifier.joblib      LightGBM classifier
@@ -12,7 +12,6 @@ Artefacts saved:
   models/quantile_p90.joblib    Quantile regressor P90
   models/artefact_card.json     Feature list, training cut-off, version
 
-Run:  python scripts/14_save_artefacts.py
 """
 
 import json
