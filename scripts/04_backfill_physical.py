@@ -70,8 +70,8 @@ def main() -> None:
     rows = {"PN": 0, "BOD": 0}
     with ThreadPoolExecutor(max_workers=config.MAX_WORKERS) as pool:
         futures = {pool.submit(fetch_one, *job): job for job in jobs}
-        for future in futures:
-            job = futures[future]
+        for future, job in futures.items():
+            
             try:
                 rows[job[0]] += future.result()
             except Exception as error:  # noqa: BLE001

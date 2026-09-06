@@ -6,7 +6,6 @@ a naive implementation gets it wrong by assuming ramps always execute.
 """
 
 import pandas as pd
-import pytest
 
 from src import curtailment
 
@@ -94,15 +93,15 @@ def test_spring_clock_change_has_46_sequential_periods():
 def test_autumn_clock_change_has_50_sequential_periods():
     day = "2024-10-27"
     pn = pd.DataFrame([{
-        "timeFrom": f"2024-10-26T23:00Z",
-        "timeTo": f"2024-10-28T00:59Z",
+        "timeFrom": "2024-10-26T23:00Z",
+        "timeTo": "2024-10-28T00:59Z",
         "levelFrom": 100, "levelTo": 100,
     }])
     boal = pd.DataFrame([{
-        "timeFrom": f"2024-10-26T23:00Z",
-        "timeTo": f"2024-10-28T00:59Z",
+        "timeFrom": "2024-10-26T23:00Z",
+        "timeTo": "2024-10-28T00:59Z",
         "levelFrom": 0, "levelTo": 0,
-        "acceptanceTime": f"2024-10-26T22:00Z",
+        "acceptanceTime": "2024-10-26T22:00Z",
         "acceptanceNumber": 1,
     }])
     profile = curtailment.curtailed_profile(pn, boal, day)
@@ -124,15 +123,15 @@ def test_energy_aggregation_correct_on_autumn_clock_change():
     # 25-hour day, 100 MW curtailed throughout = 2500 MWh
     day = "2024-10-27"
     pn = pd.DataFrame([{
-        "timeFrom": f"2024-10-26T23:00Z",
-        "timeTo": f"2024-10-28T00:59Z",
+        "timeFrom": "2024-10-26T23:00Z",
+        "timeTo": "2024-10-28T00:59Z",
         "levelFrom": 100, "levelTo": 100,
     }])
     boal = pd.DataFrame([{
-        "timeFrom": f"2024-10-26T23:00Z",
-        "timeTo": f"2024-10-28T00:59Z",
+        "timeFrom": "2024-10-26T23:00Z",
+        "timeTo": "2024-10-28T00:59Z",
         "levelFrom": 0, "levelTo": 0,
-        "acceptanceTime": f"2024-10-26T22:00Z",
+        "acceptanceTime": "2024-10-26T22:00Z",
         "acceptanceNumber": 1,
     }])
     profile = curtailment.curtailed_profile(pn, boal, day)

@@ -63,7 +63,7 @@ def main() -> None:
     print(f"Mean widening factor: {results['widening_factor'].mean():.3f}")
 
     results.to_csv(config.PROCESSED / "quantile_results.csv", index=False)
-    print(f"\nWrote quantile_results.csv")
+    print("\nWrote quantile_results.csv")
 
 
 if __name__ == "__main__":

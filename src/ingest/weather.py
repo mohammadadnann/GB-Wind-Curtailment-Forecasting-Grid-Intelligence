@@ -57,7 +57,7 @@ def fetch_clusters(start: str, end: str) -> pd.DataFrame:
 
     frames = []
     for row in centres.itertuples():
-        label = getattr(row, "name", None) or getattr(row, "name_")
+        label = getattr(row, "name", None) or row.name_
         print(f"fetching {label} ({row.latitude:.2f}, {row.longitude:.2f})")
         site = fetch_site(row.latitude, row.longitude, start, end)
         site["cluster_name"] = label

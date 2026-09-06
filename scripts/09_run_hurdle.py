@@ -62,7 +62,7 @@ def main() -> None:
     predictions = pd.concat(all_predictions)
     predictions.to_parquet(config.PROCESSED / "hurdle_predictions.parquet")
 
-    print(f"\nWrote hurdle_results.csv and hurdle_predictions.parquet")
+    print("\nWrote hurdle_results.csv and hurdle_predictions.parquet")
 
 
 if __name__ == "__main__":

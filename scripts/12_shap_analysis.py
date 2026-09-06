@@ -6,8 +6,8 @@ Both use examples from the held-out test set — never training data.
 
 """
 
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 import shap
 
@@ -75,7 +75,7 @@ def main() -> None:
     actual_value = test_frame.loc[worst_time, train.TARGET]
     pred_value = predicted[worst_time]
 
-    print(f"\nLocal explanation for worst error:")
+    print("\nLocal explanation for worst error:")
     print(f"  Time: {worst_time}")
     print(f"  Actual: {actual_value:.0f} MWh, Predicted: {pred_value:.0f} MWh")
 

@@ -12,10 +12,8 @@ from __future__ import annotations
 
 import json
 from datetime import date
-from pathlib import Path
 
 import joblib
-import numpy as np
 import pandas as pd
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel

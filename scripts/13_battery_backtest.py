@@ -68,7 +68,7 @@ def main() -> None:
         print(f"  {name:20s} £{per_mw:,.0f}/MW/year")
 
     results.to_csv(config.PROCESSED / "battery_results.csv", index=False)
-    print(f"\nWrote battery_results.csv")
+    print("\nWrote battery_results.csv")
 
 
 if __name__ == "__main__":

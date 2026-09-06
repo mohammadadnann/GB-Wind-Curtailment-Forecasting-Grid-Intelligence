@@ -14,7 +14,7 @@ def main() -> None:
 
     print(f"Wrote {len(frame):,} rows x {len(frame.columns)} columns to {out}")
     print(f"\nDate range: {frame.index.min()} to {frame.index.max()}")
-    print(f"\nMissing values per column (top 10):")
+    print("\nMissing values per column (top 10):")
     missing = frame.isna().sum().sort_values(ascending=False)
     print(missing[missing > 0].head(10).to_string())
     print(f"\nColumns: {list(frame.columns)}")

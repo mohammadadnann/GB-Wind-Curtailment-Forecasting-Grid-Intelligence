@@ -3,7 +3,7 @@
 
 import pandas as pd
 
-from src import config, train
+from src import config
 
 
 def main() -> None:
