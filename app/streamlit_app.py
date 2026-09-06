@@ -1,11 +1,12 @@
-"""GB Constraint Cost Intelligence — historical demonstration dashboard.
+"""GB Wind Curtailment Forecasting and Grid Intelligence Platform.
 
-Calls the FastAPI service for forecasts and explanations.
-This is not a live day-ahead system — it serves dates from the
-backtest feature table only. Every page makes this clear.
+This dashboard shows day ahead forecasts for Scottish wind curtailment.
+It calls the FastAPI service to get predictions and SHAP explanations for
+any date in the backtest window from April 2023 to March 2026.
 
-Run:  streamlit run app/streamlit_app.py
-Requires the FastAPI service to be running on port 8000.
+It was built to help battery operators and grid analysts understand when
+curtailment is likely to happen, how much energy might be curtailed, and
+which features are driving the forecast on any given day.
 """
 
 import requests
@@ -22,7 +23,7 @@ st.set_page_config(
 
 st.title("GB Constraint Cost Intelligence")
 st.caption(
-    "Historical demonstration — day-ahead Scottish wind curtailment forecasting. "
+    "Historical demonstration of day ahead Scottish wind curtailment forecasting. "
     "Forecasts are served from the backtest feature table, not from live data sources."
 )
 
