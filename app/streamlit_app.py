@@ -139,7 +139,7 @@ if st.button("Get forecast"):
 
 st.divider()
 st.caption(
-    "I built a two stage LightGBM model that first predicts whether a period will be constrained "
+    "This is a two stage LightGBM model that first predicts whether a period will be constrained "
     "and then predicts how much curtailment will occur. "
     "Trained on Elexon balancing mechanism data and Open Meteo weather forecasts from April 2023 to March 2026. "
     "Weather forecasts are approximated from the day before at 06:00 UTC."
