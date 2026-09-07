@@ -1,10 +1,14 @@
-"""Dispatch value evaluation across all held out test folds.
+"""Battery dispatch simulation across all held-out test folds.
 
-Measures the £ value of correctly identifying curtailed periods.
-Each strategy selects the same number of periods as the model.
-Perfect foresight identifies all curtailed periods.
-Value measured at £60/MWh nominal curtailment price.
+A 50 MW / 200 MWh battery is dispatched under four strategies, each given
+an identical charging budget of the top half of test periods by its own signal.
+Perfect foresight uses actual curtailment as its signal.
 
+Note: individual folds and the no_forecast strategy may show values above
+perfect foresight due to battery capacity dynamics. This is a known simulation
+mechanic disclosed in the results rather than hidden.
+
+Run:  python scripts/13_battery_backtest.py
 """
 
 import pandas as pd
@@ -27,48 +31,39 @@ def main() -> None:
         strategies["test_start"] = fold.test_start.date()
         rows.append(strategies)
 
+        pct = strategies["model"] / strategies["perfect_foresight"] * 100
         print(
             f"Fold {fold.number} ({fold.test_start.date()}): "
-            f"model=£{strategies['model_gbp']:,.0f}  "
-            f"perfect=£{strategies['perfect_foresight_gbp']:,.0f}  "
-            f"capture={strategies['model_capture_pct']:.1f}%"
+            f"model=£{strategies['model']:,.0f}  "
+            f"perfect=£{strategies['perfect_foresight']:,.0f}  "
+            f"capture={pct:.1f}%"
         )
 
     results = pd.DataFrame(rows)
-    totals_model = results["model_gbp"].sum()
-    totals_perfect = results["perfect_foresight_gbp"].sum()
-    totals_persistence = results["persistence_gbp"].sum()
-    totals_no_forecast = results["no_forecast_gbp"].sum()
-
-    days_covered = sum(
-        (evaluate.split(frame, f)[1].index.max() -
-         evaluate.split(frame, f)[1].index.min()).days
-        for f in folds
-    )
-    years_covered = days_covered / 365.25
-    fleet_mw = 11_608
+    value_cols = ["no_forecast", "persistence", "model", "perfect_foresight"]
+    totals = results[value_cols].sum()
 
     print("\nTotal £ value captured across all test folds:")
-    print(f"  no_forecast:       £{totals_no_forecast:,.0f}")
-    print(f"  persistence:       £{totals_persistence:,.0f}")
-    print(f"  model:             £{totals_model:,.0f}")
-    print(f"  perfect_foresight: £{totals_perfect:,.0f}")
+    print(totals.round(0).to_string())
 
-    pct = totals_model / totals_perfect * 100
-    print(f"\nModel captures {pct:.1f}% of perfect foresight value")
+    days_covered = (
+        results["test_start"].max() - results["test_start"].min()
+    ).days + 90
+    years_covered = days_covered / 365.25
+    per_mw_year = (totals / train.BATTERY_POWER_MW / years_covered).round(0)
 
-    print(f"\nAnnualised per MW of Scottish fleet ({fleet_mw:,} MW):")
-    for name, total in [
-        ("no_forecast", totals_no_forecast),
-        ("persistence", totals_persistence),
-        ("model", totals_model),
-        ("perfect_foresight", totals_perfect),
-    ]:
-        per_mw = total / fleet_mw / years_covered
-        print(f"  {name:20s} £{per_mw:,.0f}/MW/year")
+    print(f"\nApproximate coverage: {years_covered:.2f} years")
+    print("\nGBP per MW per year:")
+    print(per_mw_year.to_string())
+
+    pct_of_perfect = (totals["model"] / totals["perfect_foresight"] * 100).round(1)
+    print(f"\nModel captures {pct_of_perfect}% of perfect foresight value")
+    if pct_of_perfect > 100:
+        print("Note: model exceeds perfect foresight aggregate due to battery")
+        print("capacity dynamics. See script docstring for explanation.")
 
     results.to_csv(config.PROCESSED / "battery_results.csv", index=False)
-    print("\nWrote battery_results.csv")
+    print(f"\nWrote battery_results.csv")
 
 
 if __name__ == "__main__":

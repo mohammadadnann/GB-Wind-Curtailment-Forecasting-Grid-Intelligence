@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "training_cutoff": "2026-03-30",
-  "training_periods": 50826,
+  "training_periods": 45137,
   "feature_columns": [
     "curtailment_lag_2d",
     "curtailment_lag_7d",
@@ -20,7 +20,13 @@
     "wind_direction_cos",
     "b6_limit_mw",
     "b6_limit_vs_30d_median",
-    "b6_outage_flag"
+    "b6_outage_flag",
+    "scotex_limit_mw",
+    "scotex_limit_vs_30d_median",
+    "scotex_outage_flag",
+    "nkilgrmo_limit_mw",
+    "nkilgrmo_limit_vs_30d_median",
+    "nkilgrmo_outage_flag"
   ],
   "target": "curtailed_mwh",
   "model_architecture": "two-stage hurdle: LightGBM classifier + conditional regressor",

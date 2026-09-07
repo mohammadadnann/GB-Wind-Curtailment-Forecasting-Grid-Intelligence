@@ -132,12 +132,16 @@ def weather_features(spine: pd.DatetimeIndex) -> pd.DataFrame:
 
 
 def boundary_features(spine: pd.DatetimeIndex) -> pd.DataFrame:
-    """B6 boundary limit features from the NESO constraint flows dataset.
+    """B6, SCOTEX and NKILGRMO boundary limit features from the NESO constraint flows dataset.
 
-    The day-ahead boundary limit is published before 11:00 UTC on D-1 and
-    is therefore valid at the cut-off. We derive an outage proxy by comparing
-    the current limit to its 30-day rolling median — a limit sitting well
+    The day ahead boundary limit is published before 11:00 UTC on D-1 and
+    is therefore valid at the cut-off. I derive an outage proxy by comparing
+    the current limit to its 30 day rolling median. A limit sitting well
     below its normal level usually indicates planned outage work.
+
+    I kept three boundary groups because they capture different parts of the
+    Scottish transmission network. SCOTEX and NKILGRMO are less correlated
+    with B6 than with each other, so all three add independent signal.
     """
     limits = pd.read_csv(config.RAW / "neso_constraint_limits.csv", low_memory=False)
 
@@ -147,27 +151,31 @@ def boundary_features(spine: pd.DatetimeIndex) -> pd.DataFrame:
         .dt.tz_convert("UTC")
     )
     limits = limits.dropna(subset=["dt"])
-
-    b6_mask = (
-        limits["Constraint Group"].isin(["SHARN", "SSHARN", "SSHARN3"])
-        & limits["Limit (MW)"].between(1, 50_000)
-    )
-    b6 = limits[b6_mask].groupby("dt").agg(
-        b6_limit_mw=("Limit (MW)", "mean")
-    )
+    limits = limits[limits["Limit (MW)"].between(1, 50_000)]
 
     frame = pd.DataFrame(index=spine)
-    frame["b6_limit_mw"] = b6["b6_limit_mw"].reindex(spine)
-    frame["b6_limit_vs_30d_median"] = (
-        frame["b6_limit_mw"]
-        / frame["b6_limit_mw"].rolling("30D", min_periods=48).median()
-    )
-    frame["b6_outage_flag"] = (frame["b6_limit_vs_30d_median"] < 0.9).astype(int)
 
-    # Forecast headroom: how much capacity remains before the limit binds.
-    # Only included when both boundary limit and a forecast flow are available.
-    # We do not have a verified day-ahead flow forecast in this dataset, so
-    # headroom_mw is not included here. See feature_availability.csv.
+    boundary_groups = {
+        "b6": ["SHARN", "SSHARN", "SSHARN3"],
+        "scotex": ["SCOTEX"],
+        "nkilgrmo": ["NKILGRMO"],
+    }
+
+    for name, groups in boundary_groups.items():
+        mask = limits["Constraint Group"].isin(groups)
+        boundary = limits[mask].groupby("dt").agg(
+            limit_mw=("Limit (MW)", "mean")
+        )
+
+        frame[f"{name}_limit_mw"] = boundary["limit_mw"].reindex(spine)
+        frame[f"{name}_limit_vs_30d_median"] = (
+            frame[f"{name}_limit_mw"]
+            / frame[f"{name}_limit_mw"].rolling("30D", min_periods=48).median()
+        )
+        frame[f"{name}_outage_flag"] = (
+            frame[f"{name}_limit_vs_30d_median"] < 0.9
+        ).astype(int)
+
     return frame
 
 
@@ -194,4 +202,45 @@ def build_feature_table() -> pd.DataFrame:
             "Boundary features omitted. Download from the NESO data portal."
         )
 
-    return pd.concat(parts, axis=1)
+def build_feature_table() -> pd.DataFrame:
+    """Assembling the complete half-hourly national feature table."""
+    spine = half_hourly_spine()
+    target = load_target(spine)
+
+    parts = [
+        target,
+        lag_features(target),
+        calendar_features(spine),
+        weather_features(spine),
+    ]
+
+    limits_path = config.RAW / "neso_constraint_limits.csv"
+    if limits_path.exists():
+        parts.append(boundary_features(spine))
+    else:
+        print(
+            f"WARNING: {limits_path} not found. "
+            "Boundary features omitted. Download from the NESO data portal."
+        )
+
+    frame = pd.concat(parts, axis=1)
+
+    # Joining curtailment cost derived from BOD bid prices
+    cost_path = config.PROCESSED / "curtailment_cost_by_period.parquet"
+    if cost_path.exists():
+        cost = pd.read_parquet(cost_path)
+        local = (
+            pd.to_datetime(cost["settlementDate"])
+            + pd.to_timedelta((cost["settlementPeriod"] - 1) * 30, unit="min")
+        )
+        cost["dt"] = (
+            local.dt.tz_localize("Europe/London", ambiguous="NaT", nonexistent="NaT")
+            .dt.tz_convert("UTC")
+        )
+        cost = cost.dropna(subset=["dt"]).set_index("dt")
+        frame["curtailment_cost_gbp"] = cost["curtailment_cost_gbp"].reindex(spine).fillna(0.0)
+        frame["avg_bid_price_gbp_mwh"] = cost["avg_bid_price_gbp_mwh"].reindex(spine)
+    else:
+        print("WARNING: curtailment_cost_by_period.parquet not found. Run scripts/15_build_cost_feature.py first.")
+
+    return frame

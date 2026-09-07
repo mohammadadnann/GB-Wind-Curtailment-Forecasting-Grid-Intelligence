@@ -21,7 +21,7 @@ st.set_page_config(
     layout="wide",
 )
 
-st.title("GB Constraint Cost Intelligence")
+st.title("GB Wind Curtailment Forecasting and Grid Intelligence Platform")
 st.caption(
     "Historical demonstration of day ahead Scottish wind curtailment forecasting. "
     "Forecasts are served from the backtest feature table, not from live data sources."
